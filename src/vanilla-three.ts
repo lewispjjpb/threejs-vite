@@ -62,10 +62,10 @@ async function main():Promise<void> {
   scene.add(directionalLight);
   scene.add(directionalLight.target);
 
-  const environment = new ColorEnvironment();
+  const environment = new RoomEnvironment();
   const pmremGenerator = new THREE.PMREMGenerator( renderer );
-  scene.environment = pmremGenerator.fromScene( environment, 0.04 ).texture;
-  environment.dispose();
+  // scene.environment = pmremGenerator.fromScene( environment, 0.04 ).texture;
+  // environment.dispose();
 
   function spinningCube(time: number = 0) {
     cube.rotation.x = time / 2000;
@@ -78,7 +78,7 @@ async function main():Promise<void> {
 
     // Update animations
     if (mixer) {
-      mixer.update(0); // Update the spaceship's animations
+      mixer.update(0.01); // Update the spaceship's animations
     }
 
     mCamera.controls.update();
