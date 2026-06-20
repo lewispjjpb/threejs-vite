@@ -19,11 +19,10 @@ async function main(): Promise<void> {
   const mCamera = mainCamera(undefined, cube);
   scene.add(cube);
 
-  const playerShip = new PlayerShip();
-  await playerShip.initializePlayerShip();
-  if (playerShip.gltf) {
-    scene.add(playerShip.gltf.scene);
-  }
+  const playerShip = await PlayerShip.initializePlayerShip();
+  // if (playerShip.gltf) {
+  scene.add(playerShip.gltf.scene);
+  // }
 
   // 1. Create a dense plane geometry
   const width = 100;
