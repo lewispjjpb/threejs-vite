@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export type MainCameraType = {
-  cam: THREE.PerspectiveCamera
-  controls: OrbitControls
+  cam: THREE.PerspectiveCamera;
+  controls: OrbitControls;
 };
 
 export const mainCamera = (
   zOffset: number = 13,
-  targetObject:THREE.Mesh
+  targetObject: THREE.Mesh
 ): MainCameraType => {
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -27,18 +27,16 @@ export const mainCamera = (
   controls.mouseButtons = {
     LEFT: THREE.MOUSE.ROTATE,
     MIDDLE: THREE.MOUSE.DOLLY,
-    RIGHT: THREE.MOUSE.PAN
-  }
+    RIGHT: THREE.MOUSE.PAN,
+  };
 
   controls.target.copy(targetPosition); // Sets the point that the camera will orbit around
   // controls.target.set(0,0,0); // Sets the point that the camera will orbit around
 
-
   // controls.update();
-
 
   camera.position.z = zOffset;
   camera.position.y = 5;
 
-  return {cam: camera, controls};
-}
+  return { cam: camera, controls };
+};

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "npx vite",
-    "format": "npx prettier write ."
+    "format": "prettier --write ."
   },
   "prettier": {
     "semi": true,

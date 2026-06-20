@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 
-
 export function createCube(): THREE.Mesh {
   const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const texture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/crate.gif');
-  const material = new THREE.MeshBasicMaterial( { map: texture } );
+  const texture = new THREE.TextureLoader().load(
+    'https://threejs.org/examples/textures/crate.gif'
+  );
+  const material = new THREE.MeshBasicMaterial({ map: texture });
   const cube = new THREE.Mesh(geometry, material);
   cube.position.set(5, 2, 5);
 
@@ -22,7 +23,6 @@ export function createCube(): THREE.Mesh {
 
   // const transformControls = new TransformControls(camera, renderer.domElement);
   // transformControls.attach(cube);
-
 
   // // Apply rotation based on time
   // cube.rotation.x = time / 2000;

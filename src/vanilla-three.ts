@@ -3,18 +3,16 @@ import { createCube } from './components/floating-box';
 import { mainCamera } from './camera/main-camera';
 import { createPlayerShip } from './components/player-ship';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { ColorEnvironment} from "three/addons/environments/ColorEnvironment.js";
+import { ColorEnvironment } from 'three/addons/environments/ColorEnvironment.js';
 
-async function main():Promise<void> {
-
-
+async function main(): Promise<void> {
   const scene = new THREE.Scene();
-// scene.background = new THREE.TextureLoader().load('https://makeagif.com/i/DaOBAl.gif');
-// scene.background = new THREE.TextureLoader().load( 'https://threejs.org/examples/textures/crate.gif' );
+  // scene.background = new THREE.TextureLoader().load('https://makeagif.com/i/DaOBAl.gif');
+  // scene.background = new THREE.TextureLoader().load( 'https://threejs.org/examples/textures/crate.gif' );
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild( document.appendChild(<div>sometext</div>);
+  // document.body.appendChild( document.appendChild(<div>sometext</div>);
   document.body.appendChild(renderer.domElement);
 
   const cube = createCube(); // Create the cube without initial rotation
@@ -24,8 +22,7 @@ async function main():Promise<void> {
   const { scene: shipScene, mixer } = await createPlayerShip();
   scene.add(shipScene);
 
-
-// 1. Create a dense plane geometry
+  // 1. Create a dense plane geometry
   const width = 100;
   const height = 100;
   const textureLoader = new THREE.TextureLoader();
@@ -43,11 +40,11 @@ async function main():Promise<void> {
   );
   const material = new THREE.MeshStandardMaterial({
     map: texture,
-    side: THREE.DoubleSide // Optional: renders texture on both sides
+    side: THREE.DoubleSide, // Optional: renders texture on both sides
   });
 
   const geometry = new THREE.PlaneGeometry(width, height);
-// const material = new THREE.Mesh
+  // const material = new THREE.Mesh
   const plane = new THREE.Mesh(geometry, material);
   plane.rotation.x = -Math.PI / 2;
   scene.add(plane);
@@ -63,7 +60,7 @@ async function main():Promise<void> {
   scene.add(directionalLight.target);
 
   const environment = new RoomEnvironment();
-  const pmremGenerator = new THREE.PMREMGenerator( renderer );
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
   // scene.environment = pmremGenerator.fromScene( environment, 0.04 ).texture;
   // environment.dispose();
 
@@ -75,7 +72,6 @@ async function main():Promise<void> {
   spinningCube();
 
   function animate() {
-
     // Update animations
     if (mixer) {
       mixer.update(0.01); // Update the spaceship's animations
@@ -86,9 +82,9 @@ async function main():Promise<void> {
   }
 
   renderer.setAnimationLoop(animate);
-// renderer.setSize( window.innerWidth, window.innerHeight );
-// renderer.render( scene, mCamera );
-// animate();
+  // renderer.setSize( window.innerWidth, window.innerHeight );
+  // renderer.render( scene, mCamera );
+  // animate();
 }
 
 main();
