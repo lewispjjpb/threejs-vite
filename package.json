@@ -5,7 +5,14 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "npx vite"
+    "dev": "npx vite",
+    "format": "npx prettier write ."
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
