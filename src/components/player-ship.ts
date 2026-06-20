@@ -5,14 +5,11 @@ Promise<{ scene: THREE.Object3D; mixer: THREE.AnimationMixer | null }>;
 export class PlayerShip {
   public gltf: GLTF | null = null;
   public mixer: THREE.AnimationMixer | null = null;
-  constructor(
-    public scene: THREE.Object3D,
-    public mixer: THREE.AnimationMixer | null
-  ) {
-    // 1. Create a Texture Loader
+  private readonly colorTexture: THREE.Texture | null = null;
+  private readonly emiText: THREE.Texture | null = null;
+  private readonly roughnessTexture: THREE.Texture | null = null;
+  constructor() {
     const textureLoader = new THREE.TextureLoader();
-
-    // 2. Load your JPG files
     const colorTexture = textureLoader.load(
       'src/textures/Intergalactic Spaceship_color_4.jpg'
     );
@@ -22,11 +19,15 @@ export class PlayerShip {
     const roughnessTexture = textureLoader.load(
       'src/textures/Intergalactic Spaceship_metalness-Intergalactic Spaceship_rough.jpg'
     );
-    // WebGL textures usually need the Y-axis flipped to map correctly to 3D models
     colorTexture.flipY = false;
     emiText.flipY = false;
     roughnessTexture.flipY = false;
-
+    this.colorTexture = colorTexture;
+    this.emiText = emiText;
+    this.roughnessTexture = roughnessTexture;
+  }
+  async initializePlayerShip() {
+    const loader = new GLTFLoader();
     try {
       const gltf = await loader.loadAsync(
         '/src/models/Baked_Animations_Intergalactic_Spaceships_Version_2.gltf'
@@ -40,13 +41,13 @@ export class PlayerShip {
             meshName === 'baked_animations_intergalactic_spaceships_version_2'
           ) {
             child.material = new THREE.MeshStandardMaterial({
-              map: colorTexture, // Main color
+              map: this.colorTexture, // Main color
               // normalMap: normalTexture,       // Structural details
-              emissiveMap: emiText,
+              emissiveMap: this.emiText,
               emissive: new THREE.Color(0xffffff),
               emissiveIntensity: 1.0,
-              metalnessMap: roughnessTexture,
-              roughnessMap: roughnessTexture,
+              metalnessMap: this.roughnessTexture,
+              roughnessMap: this.roughnessTexture,
             });
           }
           child.material.needsUpdate = true;

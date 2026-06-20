@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { createCube } from './components/floating-box';
 import { mainCamera } from './camera/main-camera';
-import { createPlayerShip } from './components/player-ship';
+import { PlayerShip } from './components/player-ship';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { ColorEnvironment } from 'three/addons/environments/ColorEnvironment.js';
 
@@ -19,8 +19,11 @@ async function main(): Promise<void> {
   const mCamera = mainCamera(undefined, cube);
   scene.add(cube);
 
-  const { scene: shipScene, mixer } = await createPlayerShip();
-  scene.add(shipScene);
+  const playerShip = new PlayerShip();
+  await playerShip.initializePlayerShip();
+  if (playerShip.gltf) {
+    scene.add(playerShip.gltf.scene);
+  }
 
   // 1. Create a dense plane geometry
   const width = 100;
@@ -73,8 +76,8 @@ async function main(): Promise<void> {
 
   function animate() {
     // Update animations
-    if (mixer) {
-      mixer.update(0.01); // Update the spaceship's animations
+    if (playerShip.mixer) {
+      playerShip.mixer.update(0.01); // Update the spaceship's animations
     }
 
     mCamera.controls.update();
