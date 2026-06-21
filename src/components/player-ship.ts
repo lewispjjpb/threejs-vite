@@ -1,18 +1,26 @@
-import * as THREE from 'three';
+import {
+  TextureLoader,
+  AnimationMixer,
+  Mesh,
+  MeshStandardMaterial,
+  Color,
+} from 'three';
+
+('three');
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class PlayerShip {
   public readonly gltf: GLTF;
-  public readonly mixer: THREE.AnimationMixer;
+  public readonly mixer: AnimationMixer;
 
-  private constructor(gltf: GLTF, mixer: THREE.AnimationMixer) {
+  private constructor(gltf: GLTF, mixer: AnimationMixer) {
     this.gltf = gltf;
     this.mixer = mixer;
   }
 
   static async initializePlayerShip() {
     const loader = new GLTFLoader();
-    const textureLoader = new THREE.TextureLoader();
+    const textureLoader = new TextureLoader();
     const [colorTexture, emiText, roughnessTexture] = [
       textureLoader.load('src/textures/Intergalactic Spaceship_color_4.jpg'),
       textureLoader.load('src/textures/Intergalactic Spaceship_emi.jpg'),
@@ -28,16 +36,16 @@ export class PlayerShip {
         '/src/models/Baked_Animations_Intergalactic_Spaceships_Version_2.gltf'
       );
       gltf.scene.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
+        if (child instanceof Mesh) {
           const meshName = child.name.toLowerCase();
 
           if (
             meshName === 'baked_animations_intergalactic_spaceships_version_2'
           ) {
-            child.material = new THREE.MeshStandardMaterial({
+            child.material = new MeshStandardMaterial({
               map: colorTexture,
               emissiveMap: emiText,
-              emissive: new THREE.Color(0xffffff),
+              emissive: new Color(0xffffff),
               emissiveIntensity: 1.0,
               metalnessMap: roughnessTexture,
               roughnessMap: roughnessTexture,
@@ -47,7 +55,7 @@ export class PlayerShip {
         }
       });
 
-      const mixer: THREE.AnimationMixer = new THREE.AnimationMixer(gltf.scene);
+      const mixer: AnimationMixer = new AnimationMixer(gltf.scene);
 
       // Check for animations and setup mixer
       if (gltf.animations.length > 0) {

@@ -6,17 +6,14 @@ export type MainCameraType = {
   controls: OrbitControls;
 };
 
-export const mainCamera = (
-  zOffset: number = 13,
-  targetObject: THREE.Mesh
-): MainCameraType => {
+export const mainCamera = (zOffset: number = 13): MainCameraType => {
   const camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
-  const targetPosition = targetObject.position;
+  const targetPosition = new THREE.Vector3(0, 0, 0);
   const controls = new OrbitControls(camera, document.body);
   controls.enableDamping = true;
   controls.dampingFactor = 1;
@@ -30,10 +27,7 @@ export const mainCamera = (
     RIGHT: THREE.MOUSE.PAN,
   };
 
-  controls.target.copy(targetPosition); // Sets the point that the camera will orbit around
-  // controls.target.set(0,0,0); // Sets the point that the camera will orbit around
-
-  // controls.update();
+  controls.target.copy(targetPosition);
 
   camera.position.z = zOffset;
   camera.position.y = 5;
