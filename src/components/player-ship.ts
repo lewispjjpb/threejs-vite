@@ -60,7 +60,7 @@ export class PlayerShip {
       // Check for animations and setup mixer
       if (gltf.animations.length > 0) {
         gltf.animations.forEach((clip) => {
-          // only want to keep the engine rotation animations
+          // only want to keep the engine rotation animations...terribly inefficient
           clip.tracks = clip.tracks.filter(
             (track) =>
               track.name.includes('quaternion') &&

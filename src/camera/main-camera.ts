@@ -1,36 +1,36 @@
-import * as THREE from 'three';
+import { PerspectiveCamera, Vector3, MOUSE } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-export type MainCameraType = {
-  cam: THREE.PerspectiveCamera;
-  controls: OrbitControls;
-};
+export class MainCamera {
+  public camera: PerspectiveCamera;
+  public controls: OrbitControls;
 
-export const mainCamera = (zOffset: number = 13): MainCameraType => {
-  const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  );
-  const targetPosition = new THREE.Vector3(0, 0, 0);
-  const controls = new OrbitControls(camera, document.body);
-  controls.enableDamping = true;
-  controls.dampingFactor = 1;
-  controls.enableZoom = true;
-  controls.minDistance = 3;
-  controls.maxDistance = 20;
+  constructor(zOffset: number) {
+    const camera = new PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    const targetPosition = new Vector3(0, 0, 0);
+    const controls = new OrbitControls(camera, document.body);
+    controls.enableDamping = true;
+    controls.dampingFactor = 1;
+    controls.enableZoom = true;
+    controls.minDistance = 3;
+    controls.maxDistance = 100;
 
-  controls.mouseButtons = {
-    LEFT: THREE.MOUSE.ROTATE,
-    MIDDLE: THREE.MOUSE.DOLLY,
-    RIGHT: THREE.MOUSE.PAN,
-  };
+    controls.mouseButtons = {
+      LEFT: MOUSE.ROTATE,
+      MIDDLE: MOUSE.DOLLY,
+      RIGHT: MOUSE.PAN,
+    };
 
-  controls.target.copy(targetPosition);
+    controls.target.copy(targetPosition);
 
-  camera.position.z = zOffset;
-  camera.position.y = 5;
-
-  return { cam: camera, controls };
-};
+    camera.position.z = zOffset;
+    camera.position.y = 15;
+    this.camera = camera;
+    this.controls = controls;
+  }
+}

@@ -1,6 +1,6 @@
-import { AmbientLight, Scene, WebGLRenderer, Mesh } from 'three';
+import { AmbientLight, Scene, WebGLRenderer } from 'three';
 import { GameCube } from './components/floating-box';
-import { mainCamera } from './camera/main-camera';
+import { MainCamera } from './camera/main-camera';
 import { PlayerShip } from './components/player-ship';
 import { DirectionalLightObject } from './lighting/directional-light';
 import { GeometryPlane } from './components/geometry-plane';
@@ -9,7 +9,7 @@ const floorWidth = 100;
 const floorLength = 100;
 
 const directionalLightPosition: [number, number, number] = [10, 20, 10];
-const directionalLightColor = '#FF0000';
+const directionalLightColor = '#FF00FF';
 
 function setWorld(scene: Scene) {
   const geometryPlane = new GeometryPlane(
@@ -40,25 +40,25 @@ async function addObjects(scene: Scene): Promise<PlayerShip> {
   return playerShip;
 }
 
-async function main(): Promise<void> {
+async function main() {
   const scene = new Scene();
   const renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  const mCamera = mainCamera();
 
   setWorld(scene);
+
+  const mCamera = new MainCamera(30);
   const playerShip = await addObjects(scene);
 
   function animate() {
-    if (playerShip.mixer) {
-      playerShip.mixer.update(0.01); // Update the spaceship's animations
-    }
-
+    playerShip.mixer.update(0.01);
     mCamera.controls.update();
-    renderer.render(scene, mCamera.cam);
+    renderer.render(scene, mCamera.camera);
   }
   renderer.setAnimationLoop(animate);
 }
 
-main();
+main()
+  .then(() => console.log('game started'))
+  .catch((err) => console.error({ startError: err }));
