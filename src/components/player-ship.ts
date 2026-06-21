@@ -3,9 +3,9 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 export class PlayerShip {
   public readonly gltf: GLTF;
-  public readonly mixer: THREE.AnimationMixer | null;
+  public readonly mixer: THREE.AnimationMixer;
 
-  private constructor(gltf: GLTF, mixer: THREE.AnimationMixer | null) {
+  private constructor(gltf: GLTF, mixer: THREE.AnimationMixer) {
     this.gltf = gltf;
     this.mixer = mixer;
   }
@@ -13,13 +13,16 @@ export class PlayerShip {
   static async initializePlayerShip() {
     const loader = new GLTFLoader();
     const textureLoader = new THREE.TextureLoader();
-    const [colorTexture, emiText, roughnessTexture] = await Promise.all([
+    const [colorTexture, emiText, roughnessTexture] = [
       textureLoader.load('src/textures/Intergalactic Spaceship_color_4.jpg'),
       textureLoader.load('src/textures/Intergalactic Spaceship_emi.jpg'),
       textureLoader.load(
         'src/textures/Intergalactic Spaceship_metalness-Intergalactic Spaceship_rough.jpg'
       ),
-    ]);
+    ];
+    colorTexture.flipY = false;
+    emiText.flipY = false;
+    roughnessTexture.flipY = false;
     try {
       const gltf = await loader.loadAsync(
         '/src/models/Baked_Animations_Intergalactic_Spaceships_Version_2.gltf'
@@ -44,12 +47,12 @@ export class PlayerShip {
         }
       });
 
-      let mixer: THREE.AnimationMixer | null = null;
+      const mixer: THREE.AnimationMixer = new THREE.AnimationMixer(gltf.scene);
 
       // Check for animations and setup mixer
       if (gltf.animations.length > 0) {
-        mixer = new THREE.AnimationMixer(gltf.scene);
         gltf.animations.forEach((clip) => {
+          // only want to keep the engine rotation animations
           clip.tracks = clip.tracks.filter(
             (track) =>
               track.name.includes('quaternion') &&
