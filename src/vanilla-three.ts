@@ -3,16 +3,16 @@ import { createCube } from './components/floating-box';
 import { mainCamera } from './camera/main-camera';
 import { PlayerShip } from './components/player-ship';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { ColorEnvironment } from 'three/addons/environments/ColorEnvironment.js';
+import { GeometryPlane } from './components/geometry-plane';
+
+const floorWidth = 100;
+const floorLength = 100;
 
 async function main(): Promise<void> {
   const scene = new THREE.Scene();
-  // scene.background = new THREE.TextureLoader().load('https://makeagif.com/i/DaOBAl.gif');
-  // scene.background = new THREE.TextureLoader().load( 'https://threejs.org/examples/textures/crate.gif' );
 
   const renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  // document.body.appendChild( document.appendChild(<div>sometext</div>);
   document.body.appendChild(renderer.domElement);
 
   const cube = createCube(); // Create the cube without initial rotation
@@ -20,36 +20,14 @@ async function main(): Promise<void> {
   scene.add(cube);
 
   const playerShip = await PlayerShip.initializePlayerShip();
-  // if (playerShip.gltf) {
   scene.add(playerShip.gltf.scene);
-  // }
 
-  // 1. Create a dense plane geometry
-  const width = 100;
-  const height = 100;
-  const textureLoader = new THREE.TextureLoader();
-  const texture = textureLoader.load(
-    '/grass.jpg',
-    () => {
-      console.log('Texture loaded successfully');
-      animate(); // Ensure it starts rendering after loading.
-    },
-    undefined,
-    (err) => {
-      console.error('Error loading texture:');
-      console.error(err);
-    }
+  const geometryPlane = new GeometryPlane(
+    floorWidth,
+    floorLength,
+    -Math.PI / 2
   );
-  const material = new THREE.MeshStandardMaterial({
-    map: texture,
-    side: THREE.DoubleSide, // Optional: renders texture on both sides
-  });
-
-  const geometry = new THREE.PlaneGeometry(width, height);
-  // const material = new THREE.Mesh
-  const plane = new THREE.Mesh(geometry, material);
-  plane.rotation.x = -Math.PI / 2;
-  scene.add(plane);
+  scene.add(geometryPlane.plane);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 1); // Ambient light for general illumination
   scene.add(ambientLight);
@@ -60,11 +38,6 @@ async function main(): Promise<void> {
 
   scene.add(directionalLight);
   scene.add(directionalLight.target);
-
-  const environment = new RoomEnvironment();
-  const pmremGenerator = new THREE.PMREMGenerator(renderer);
-  // scene.environment = pmremGenerator.fromScene( environment, 0.04 ).texture;
-  // environment.dispose();
 
   function spinningCube(time: number = 0) {
     cube.rotation.x = time / 2000;
