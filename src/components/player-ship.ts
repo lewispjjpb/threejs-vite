@@ -3,7 +3,7 @@ import {
   AnimationMixer,
   Mesh,
   MeshStandardMaterial,
-  Color, Object3D,
+  Color, Object3D, Camera,
 } from 'three';
 
 import { FlyControls } from 'three/addons/controls/FlyControls.js';
@@ -13,14 +13,22 @@ import { AnimationManager } from '../services/animation-manager';
 export class PlayerShip extends Object3D {
   public readonly gltf: GLTF;
   private readonly mixer: AnimationMixer;
+  public readonly controls: FlyControls;
 
-  private constructor(gltf: GLTF, mixer: AnimationMixer) {
+  private constructor(gltf: GLTF, mixer: AnimationMixer, camera: Camera, domElement?: HTMLElement) {
     super();
     this.gltf = gltf;
     this.mixer = mixer;
+    this.controls = new FlyControls(camera, domElement);
+
+    // Configure FlyControls settings
+    this.controls.movementSpeed = 3;
+    this.controls.rollSpeed = 0.5;
+    this.controls.autoForward = true;
+    this.controls.dragToLook = true;
   }
 
-  static async initializePlayerShip(mixManager: AnimationManager) {
+  static async initializePlayerShip(mixManager: AnimationManager, camera: Camera) {
     const loader = new GLTFLoader();
     const textureLoader = new TextureLoader();
     const [colorTexture, emiText, roughnessTexture] = [
@@ -73,7 +81,7 @@ export class PlayerShip extends Object3D {
       }
       mixManager.add(mixer);
       gltf.scene.position.set(0, 4, 0);
-      return new PlayerShip(gltf, mixer);
+      return new PlayerShip(gltf, mixer, camera, document.body);
     } catch (error) {
       console.error('Error loading player ship:', error);
       throw error;

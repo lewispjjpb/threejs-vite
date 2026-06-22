@@ -52,13 +52,12 @@ async function main() {
   }
   renderer.setAnimationLoop(animate);
 
-  async function addObjects(scene: Scene): Promise<PlayerShip> {
+  async function addObjects(scene: Scene): Promise<void> {
     const cube = new GameCube(1);
     scene.add(cube.cubeMesh);
 
-    const playerShip = await PlayerShip.initializePlayerShip(animationManager);
+    const playerShip = await PlayerShip.initializePlayerShip(animationManager, mCamera.camera);
     scene.add(playerShip.gltf.scene);
-    return playerShip;
   }
 }
 
