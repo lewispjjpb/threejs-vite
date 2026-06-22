@@ -3,22 +3,24 @@ import {
   AnimationMixer,
   Mesh,
   MeshStandardMaterial,
-  Color,
+  Color, Object3D,
 } from 'three';
 
-('three');
+import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { AnimationManager } from '../services/animation-manager';
 
-export class PlayerShip {
+export class PlayerShip extends Object3D {
   public readonly gltf: GLTF;
-  public readonly mixer: AnimationMixer;
+  private readonly mixer: AnimationMixer;
 
   private constructor(gltf: GLTF, mixer: AnimationMixer) {
+    super();
     this.gltf = gltf;
     this.mixer = mixer;
   }
 
-  static async initializePlayerShip() {
+  static async initializePlayerShip(mixManager: AnimationManager) {
     const loader = new GLTFLoader();
     const textureLoader = new TextureLoader();
     const [colorTexture, emiText, roughnessTexture] = [
@@ -69,7 +71,7 @@ export class PlayerShip {
           return mixer?.clipAction(clip).play();
         });
       }
-
+      mixManager.add(mixer);
       gltf.scene.position.set(0, 4, 0);
       return new PlayerShip(gltf, mixer);
     } catch (error) {
