@@ -51,7 +51,7 @@ async function main() {
   const updateManager = new UpdateManager();
   setWorld(scene);
 
-  const mCamera = new MainCamera(30);
+  const mCamera = new MainCamera(-30);
   await addObjects(scene, updateManager);
   function animate() {
     timer.update();

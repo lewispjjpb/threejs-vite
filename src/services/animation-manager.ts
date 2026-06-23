@@ -34,9 +34,9 @@ export class UpdateManager {
   update(delta: number) {
     this.mixers.forEach((mixer) => mixer.update(delta));
     const forwardVector = new Vector3(0, 0, .1);
-    const leftVector = new Vector3(-.1, 0, 0);
+    const leftVector = new Vector3(.1, 0, 0);
     const upVector = new Vector3(0, .1, 0);
-    const rightVector = new Vector3(.1, 0, 0);
+    const rightVector = new Vector3(-.1, 0, 0);
     const downVector = new Vector3(0, -.1, 0);
 
 

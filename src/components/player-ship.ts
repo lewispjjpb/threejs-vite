@@ -84,6 +84,7 @@ export class PlayerShip extends Object3D {
       mixManager.addMixers(mixer);
       mixManager.addMeshes(gltf.scene);
       gltf.scene.position.set(0, 4, 0);
+      // gltf.scene.rotation.set(0, 3.14, 0);
       return new PlayerShip(gltf, mixer);
     } catch (error) {
       console.error('Error loading player ship:', error);
