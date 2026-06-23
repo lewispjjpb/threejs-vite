@@ -3,34 +3,36 @@ import {
   AnimationMixer,
   Mesh,
   MeshStandardMaterial,
-  Color, Object3D, Camera,
+  Color, Object3D, Camera, Vector3,
 } from 'three';
 
 import { FlyControls } from 'three/addons/controls/FlyControls.js';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { AnimationManager } from '../services/animation-manager';
+import { UpdateManager } from '../services/animation-manager';
 
 export class PlayerShip extends Object3D {
   public readonly gltf: GLTF;
   private readonly mixer: AnimationMixer;
-  public readonly controls: FlyControls;
+  // public readonly controls: FlyControls;
 
-  private constructor(gltf: GLTF, mixer: AnimationMixer, camera: Camera, domElement?: HTMLElement) {
+  private constructor(gltf: GLTF, mixer: AnimationMixer) {
     super();
     this.gltf = gltf;
     this.mixer = mixer;
-    this.controls = new FlyControls(camera, domElement);
-
-    // Configure FlyControls settings
-    this.controls.movementSpeed = 3;
-    this.controls.rollSpeed = 0.5;
-    this.controls.autoForward = true;
-    this.controls.dragToLook = true;
+    // const forwardVector = new Vector3(0, 0, 1);
+    // this.controls = new FlyControls(this as unknown as Camera, domElement);
+    //
+    // // Configure FlyControls settings
+    // this.controls.movementSpeed = 10;
+    // this.controls.rollSpeed = 0.5;
+    // this.controls.autoForward = true;
+    // this.controls.dragToLook = true;
   }
 
-  static async initializePlayerShip(mixManager: AnimationManager, camera: Camera) {
+  static async initializePlayerShip(mixManager: UpdateManager) {
     const loader = new GLTFLoader();
     const textureLoader = new TextureLoader();
+
     const [colorTexture, emiText, roughnessTexture] = [
       textureLoader.load('src/textures/Intergalactic Spaceship_color_4.jpg'),
       textureLoader.load('src/textures/Intergalactic Spaceship_emi.jpg'),
@@ -79,12 +81,14 @@ export class PlayerShip extends Object3D {
           return mixer?.clipAction(clip).play();
         });
       }
-      mixManager.add(mixer);
+      mixManager.addMixers(mixer);
+      mixManager.addMeshes(gltf.scene);
       gltf.scene.position.set(0, 4, 0);
-      return new PlayerShip(gltf, mixer, camera, document.body);
+      return new PlayerShip(gltf, mixer);
     } catch (error) {
       console.error('Error loading player ship:', error);
       throw error;
     }
   }
+
 }
