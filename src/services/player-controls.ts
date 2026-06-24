@@ -1,5 +1,4 @@
-import {Object3D} from "three";
-
+import { Object3D } from 'three';
 
 export class PlayerControls {
   constructor(mesh: Object3D) {
@@ -8,6 +7,6 @@ export class PlayerControls {
       if (e.key === 'a') {
         console.log('w');
       }
-    }
+    };
   }
 }

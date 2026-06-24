@@ -1,4 +1,4 @@
-import {Mesh, MeshBasicMaterial, BoxGeometry, TextureLoader} from 'three';
+import { Mesh, MeshBasicMaterial, BoxGeometry, TextureLoader } from 'three';
 
 export class GameCube {
   public readonly cubeMesh: Mesh;
@@ -10,10 +10,5 @@ export class GameCube {
     const material = new MeshBasicMaterial({ map: texture });
     this.cubeMesh = new Mesh(geometry, material);
     this.cubeMesh.position.set(5, 2, 5);
-  }
-
-  spinningCube(time: number = 0) {
-    this.cubeMesh.rotation.x = time / 2000;
-    this.cubeMesh.rotation.y = time / 1000;
   }
 }

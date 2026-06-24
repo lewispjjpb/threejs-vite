@@ -13,6 +13,7 @@ export default function App() {
           <sphereGeometry args={[1, 32, 32]} />
         </mesh>
       </Canvas>
+      <div>This could be some other react elements</div>
     </div>
   );
 }

@@ -32,12 +32,16 @@ function setWorld(scene: Scene) {
   scene.add(directionalLight.dirLight.target);
 }
 
-async function addObjects(scene: Scene, updateManager:UpdateManager): Promise<void> {
+async function addObjects(
+  scene: Scene,
+  updateManager: UpdateManager
+): Promise<PlayerShip> {
   const cube = new GameCube(1);
   scene.add(cube.cubeMesh);
 
   const playerShip = await PlayerShip.initializePlayerShip(updateManager);
   scene.add(playerShip.gltf.scene);
+  return playerShip;
 }
 
 async function main() {
@@ -46,22 +50,20 @@ async function main() {
   const renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
-  // document.onkeydown = (e) => {console.log(e.key)}
 
   const updateManager = new UpdateManager();
   setWorld(scene);
 
-  const mCamera = new MainCamera(-30);
-  await addObjects(scene, updateManager);
+  const playerShip = await addObjects(scene, updateManager);
+  const mCamera = new MainCamera(-30, playerShip);
   function animate() {
     timer.update();
     updateManager.update(timer.getDelta());
-    mCamera.controls.update();
+
+    mCamera.updatePosition();
     renderer.render(scene, mCamera.camera);
   }
   renderer.setAnimationLoop(animate);
-
-
 }
 
 main()

@@ -8,11 +8,11 @@ export class UpdateManager {
   constructor() {
     document.onkeydown = (e) => {
       this.keysPressed[e.key] = true;
-    }
+    };
 
     document.onkeyup = (e) => {
       this.keysPressed[e.key] = false;
-    }
+    };
   }
 
   addMixers(mixer: AnimationMixer) {
@@ -33,22 +33,21 @@ export class UpdateManager {
 
   update(delta: number) {
     this.mixers.forEach((mixer) => mixer.update(delta));
-    const forwardVector = new Vector3(0, 0, .1);
-    const leftVector = new Vector3(.1, 0, 0);
-    const upVector = new Vector3(0, .1, 0);
-    const rightVector = new Vector3(-.1, 0, 0);
-    const downVector = new Vector3(0, -.1, 0);
-
-
-// Step 2: Call this inside your animation loop to move forward by 0.1 units
+    const forwardVector = new Vector3(0, 0, 0.1);
+    const leftVector = new Vector3(0.1, 0, 0);
+    const upVector = new Vector3(0, 0.1, 0);
+    const rightVector = new Vector3(-0.1, 0, 0);
+    const downVector = new Vector3(0, -0.1, 0);
 
     this.meshes.forEach((mesh) => {
       mesh.translateOnAxis(forwardVector, 0.5);
       if (this.keysPressed['a']) {
-        mesh.translateOnAxis(leftVector, 0.5);
+        mesh.rotateY(Math.PI / 180);
+        // mesh.translateOnAxis(leftVector, 0.5);
       }
       if (this.keysPressed['d']) {
-        mesh.translateOnAxis(rightVector, 0.5);
+        mesh.rotateY(-Math.PI / 180);
+        // mesh.translateOnAxis(rightVector, 0.5);
       }
       if (this.keysPressed['w']) {
         mesh.translateOnAxis(upVector, 0.5);
