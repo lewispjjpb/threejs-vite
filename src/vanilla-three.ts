@@ -4,7 +4,8 @@ import { MainCamera } from './camera/main-camera';
 import { PlayerShip } from './components/player-ship';
 import { DirectionalLightObject } from './lighting/directional-light';
 import { GeometryPlane } from './components/geometry-plane';
-import { UpdateManager } from './services/animation-manager';
+import { UpdateManager } from './services/update-manager';
+import { PlayerControls } from './services/player-controls';
 
 const floorWidth = 100;
 const floorLength = 100;
@@ -32,14 +33,11 @@ function setWorld(scene: Scene) {
   scene.add(directionalLight.dirLight.target);
 }
 
-async function addObjects(
-  scene: Scene,
-  updateManager: UpdateManager
-): Promise<PlayerShip> {
+async function addObjects(scene: Scene): Promise<PlayerShip> {
   const cube = new GameCube(1);
   scene.add(cube.cubeMesh);
 
-  const playerShip = await PlayerShip.initializePlayerShip(updateManager);
+  const playerShip = await PlayerShip.initializePlayerShip();
   scene.add(playerShip.gltf.scene);
   return playerShip;
 }
@@ -51,11 +49,14 @@ async function main() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  const updateManager = new UpdateManager();
   setWorld(scene);
 
-  const playerShip = await addObjects(scene, updateManager);
+  const playerShip = await addObjects(scene);
+  const playerControls = new PlayerControls(playerShip.gltf.scene);
+
   const mCamera = new MainCamera(-30, playerShip);
+  const updateManager = new UpdateManager(playerControls);
+
   function animate() {
     timer.update();
     updateManager.update(timer.getDelta());

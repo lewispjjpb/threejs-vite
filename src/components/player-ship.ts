@@ -8,7 +8,7 @@ import {
 } from 'three';
 
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { UpdateManager } from '../services/animation-manager';
+import { UpdateManager } from '../services/update-manager';
 
 export class PlayerShip extends Object3D {
   public readonly gltf: GLTF;
@@ -18,7 +18,7 @@ export class PlayerShip extends Object3D {
     this.gltf = gltf;
   }
 
-  static async initializePlayerShip(mixManager: UpdateManager) {
+  static async initializePlayerShip() {
     const loader = new GLTFLoader();
     const textureLoader = new TextureLoader();
 
@@ -74,8 +74,6 @@ export class PlayerShip extends Object3D {
           return mixer?.clipAction(clip).play();
         });
       }
-      mixManager.addMixers(mixer);
-      mixManager.addMeshes(gltf.scene);
       gltf.scene.position.set(0, 4, 0);
       return new PlayerShip(gltf);
     } catch (error) {

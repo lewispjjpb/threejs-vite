@@ -9,7 +9,6 @@ const far = 1000;
 
 export class MainCamera {
   public camera: PerspectiveCamera;
-  public controls: OrbitControls;
   private readonly cameraOffset = new Vector3(0, 5, 10);
   private readonly objectToFollow: PlayerShip;
 
@@ -31,22 +30,21 @@ export class MainCamera {
     };
 
     this.camera = camera;
-    this.controls = controls;
+    // this.controls = controls;
   }
 
   updatePosition() {
-    const pos = this.objectToFollow.gltf.scene.position;
     const playerPosition = this.objectToFollow.gltf.scene.position;
     const playerRotation = this.objectToFollow.gltf.scene.quaternion;
-
     const worldOffset = this.cameraOffset
       .clone()
       .applyQuaternion(playerRotation)
       .add(playerPosition);
 
     this.camera.position.lerp(worldOffset, 0.1);
-    this.controls.target.copy(pos);
-    this.camera.lookAt(pos);
-    this.controls.update();
+    this.camera.quaternion.copy(playerRotation);
+    this.camera.lookAt(playerPosition);
+    // this.controls.target.copy(playerPosition);
+    // this.controls.update();
   }
 }
