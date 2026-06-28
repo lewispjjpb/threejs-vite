@@ -8,14 +8,15 @@ import {
 } from 'three';
 
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { UpdateManager } from '../services/update-manager';
 
 export class PlayerShip extends Object3D {
   public readonly gltf: GLTF;
+  public readonly mixer: AnimationMixer;
 
-  private constructor(gltf: GLTF) {
+  private constructor(gltf: GLTF, mixer: AnimationMixer) {
     super();
     this.gltf = gltf;
+    this.mixer = mixer;
   }
 
   static async initializePlayerShip() {
@@ -75,7 +76,7 @@ export class PlayerShip extends Object3D {
         });
       }
       gltf.scene.position.set(0, 4, 0);
-      return new PlayerShip(gltf);
+      return new PlayerShip(gltf, mixer);
     } catch (error) {
       console.error('Error loading player ship:', error);
       throw error;

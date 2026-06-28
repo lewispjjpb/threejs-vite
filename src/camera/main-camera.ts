@@ -11,6 +11,7 @@ export class MainCamera {
   public camera: PerspectiveCamera;
   private readonly cameraOffset = new Vector3(0, 5, 10);
   private readonly objectToFollow: PlayerShip;
+  private readonly controls: OrbitControls;
 
   constructor(zOffset: number, objectToFollow: PlayerShip) {
     const camera = new PerspectiveCamera(fov, aspect, near, far);
@@ -30,7 +31,7 @@ export class MainCamera {
     };
 
     this.camera = camera;
-    // this.controls = controls;
+    this.controls = controls;
   }
 
   updatePosition() {
@@ -44,7 +45,7 @@ export class MainCamera {
     this.camera.position.lerp(worldOffset, 0.1);
     this.camera.quaternion.copy(playerRotation);
     this.camera.lookAt(playerPosition);
-    // this.controls.target.copy(playerPosition);
-    // this.controls.update();
+    this.controls.target.copy(playerPosition);
+    // this.controls.update(); //test toggle
   }
 }

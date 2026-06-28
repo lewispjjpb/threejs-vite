@@ -56,6 +56,7 @@ async function main() {
 
   const mCamera = new MainCamera(-30, playerShip);
   const updateManager = new UpdateManager(playerControls);
+  updateManager.addMixers(playerShip.mixer);
 
   function animate() {
     timer.update();
