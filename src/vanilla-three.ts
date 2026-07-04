@@ -6,6 +6,8 @@ import { DirectionalLightObject } from './lighting/directional-light';
 import { GeometryPlane } from './components/geometry-plane';
 import { UpdateManager } from './services/update-manager';
 import { PlayerControls } from './services/player-controls';
+import { PointDataLoader } from './services/point-data-loader';
+import { POINT_CLOUD_OPTIONS } from './utils/app-constants';
 
 const floorWidth = 100;
 const floorLength = 100;
@@ -13,7 +15,7 @@ const floorLength = 100;
 const directionalLightPosition: [number, number, number] = [10, 20, 10];
 const directionalLightColor = '#FF00FF';
 
-function setWorld(scene: Scene) {
+async function setWorld(scene: Scene) {
   const geometryPlane = new GeometryPlane(
     floorWidth,
     floorLength,
@@ -31,6 +33,11 @@ function setWorld(scene: Scene) {
   );
   scene.add(directionalLight.dirLight);
   scene.add(directionalLight.dirLight.target);
+
+  const pDL = await PointDataLoader.initializePointLoader(
+    POINT_CLOUD_OPTIONS.bunny
+  );
+  pDL.addPointToScene(scene);
 }
 
 async function addObjects(scene: Scene): Promise<PlayerShip> {
