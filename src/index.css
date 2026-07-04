@@ -123,10 +123,15 @@ code {
 .controls {
   position: absolute;
   bottom: 10px;
+  right: 10px;
   width: 100%;
   text-align: right;
   z-index: 100;
   display: block;
+}
+
+.bump {
+  bottom: 30px;
 }
 
 #canvas-container {

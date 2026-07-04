@@ -21,7 +21,7 @@ async function setWorld(scene: Scene) {
     floorLength,
     -Math.PI / 2
   );
-  scene.add(geometryPlane.plane);
+  // scene.add(geometryPlane.plane);
 
   const ambientLight = new AmbientLight(0xffffff, 1); // Ambient light for general illumination
   scene.add(ambientLight);
@@ -35,7 +35,7 @@ async function setWorld(scene: Scene) {
   scene.add(directionalLight.dirLight.target);
 
   const pDL = await PointDataLoader.initializePointLoader(
-    POINT_CLOUD_OPTIONS.bunny
+    POINT_CLOUD_OPTIONS.terrain
   );
   pDL.addPointToScene(scene);
 }
@@ -56,7 +56,7 @@ async function main() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  setWorld(scene);
+  await setWorld(scene);
 
   const playerShip = await addObjects(scene);
   const playerControls = new PlayerControls(playerShip.gltf.scene);

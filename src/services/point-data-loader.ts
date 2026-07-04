@@ -14,7 +14,7 @@ export class PointDataLoader {
     try {
       const points = await loader.loadAsync(pointCloudOptions.url);
       points.geometry.center(); //TODO: variable
-      points.geometry.rotateX(Math.PI); //TODO: variable
+      points.geometry.rotateX(-Math.PI / 2); //TODO: variable
       points.scale.set(
         pointCloudOptions.scale,
         pointCloudOptions.scale,
