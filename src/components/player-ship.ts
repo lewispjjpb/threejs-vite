@@ -17,6 +17,7 @@ export class PlayerShip extends Object3D {
     super();
     this.gltf = gltf;
     this.mixer = mixer;
+    gltf.scene.position.set(0, 4, 0);
   }
 
   static async initializePlayerShip() {
@@ -75,11 +76,15 @@ export class PlayerShip extends Object3D {
           return mixer?.clipAction(clip).play();
         });
       }
-      gltf.scene.position.set(0, 4, 0);
+
       return new PlayerShip(gltf, mixer);
     } catch (error) {
       console.error('Error loading player ship:', error);
       throw error;
     }
+  }
+
+  public setPlayerStartPostion() {
+    this.gltf.scene.position.set(0, 4, 0);
   }
 }

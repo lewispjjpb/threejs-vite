@@ -46,6 +46,5 @@ export class MainCamera {
     this.camera.quaternion.copy(playerRotation);
     this.camera.lookAt(playerPosition);
     this.controls.target.copy(playerPosition);
-    // this.controls.update(); //test toggle
   }
 }
