@@ -65,7 +65,7 @@ const react_1 = __importStar(require('react'));
 const client_1 = require('react-dom/client');
 require('./index.css');
 const App_1 = __importDefault(require('./App'));
-(0, client_1.createRoot)(document.getElementById('root')).render(
+(0, client_1.createRoot)(document.getElementById('react-root')).render(
   react_1.default.createElement(
     react_1.StrictMode,
     null,

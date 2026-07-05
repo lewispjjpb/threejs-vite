@@ -10,9 +10,16 @@
     <div id="react-root">
       <script type="module" src="/src/main.tsx"></script>
     </div>
-    <script type="module" src="/src/vanilla-three.ts"></script>
-    <div id="info">I'm rendered with vanilla three.js</div>
-    <div class="controls">WASD to strafe</div>
-    <div class="controls bump">Arrow keys to turn</div>
+    <div id="three-root">
+      <script type="module" src="/src/vanilla-three.ts"></script>
+    </div>
+    <div id="info" class="ui-background">
+      I'm rendered with vanilla three.js
+    </div>
+    <div class="controls ui-background">
+      <p>WASD to strafe</p>
+      <p>arrow keys to turn</p>
+      <p>- = to control speed</p>
+    </div>
   </body>
 </html>

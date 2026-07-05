@@ -1,4 +1,4 @@
-import { AmbientLight, Scene, WebGLRenderer, Timer, Vector3 } from 'three';
+import { AmbientLight, Scene, WebGLRenderer, Timer, Camera } from 'three';
 import { MainCamera } from './camera/main-camera';
 import { PlayerShip } from './components/player-ship';
 import { DirectionalLightObject } from './lighting/directional-light';
@@ -19,7 +19,7 @@ async function setWorld(
   scene: Scene,
   pointSelection: PointCloudOptionKeys = 'terrain1'
 ) {
-  const ambientLight = new AmbientLight(0xffffff, 1); // Ambient light for general illumination
+  const ambientLight = new AmbientLight(0xffffff, 1);
   scene.add(ambientLight);
   const directionalLight = new DirectionalLightObject(
     directionalLightPosition,
@@ -45,28 +45,47 @@ async function addObjects(scene: Scene): Promise<PlayerShip> {
   return playerShip;
 }
 
+function resizeRenderWindow(
+  renderer: WebGLRenderer,
+  camera: MainCamera['camera']
+) {
+  const parentElement = document.getElementById('three-root');
+  if (!parentElement) throw new Error('No parent element found');
+  const width = parentElement.clientWidth;
+  const height = parentElement.clientHeight;
+  renderer.setSize(width, height);
+  parentElement.appendChild(renderer.domElement);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+}
+
 async function main() {
   const timer = new Timer();
   const scene = new Scene();
   const renderer = new WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
 
   await setWorld(scene);
   let pointSelection: PointCloudOptionKeys = 'terrain1';
   const playerShip = await addObjects(scene);
   const playerControls = new PlayerControls(playerShip.gltf.scene);
+  const mCamera = new MainCamera(-30, playerShip);
 
+  resizeRenderWindow(renderer, mCamera.camera);
   document.body.addEventListener('click', (e) => {
-    //refactor to allow for more than just the select element
+    //TODO: refactor to allow for more than just the select element
     const target = e.target as HTMLSelectElement;
-    pointSelection = (target?.value as PointCloudOptionKeys) ?? pointSelection;
-    addPointData(scene, pointSelection);
-    playerShip.setPlayerStartPostion();
+    if (target.id === 'point-cloud-select') {
+      pointSelection =
+        (target?.value as PointCloudOptionKeys) ?? pointSelection;
+      addPointData(scene, pointSelection);
+      playerShip.setPlayerStartPostion();
+    }
   });
+  window.addEventListener('resize', () =>
+    resizeRenderWindow(renderer, mCamera.camera)
+  );
   await addPointData(scene, pointSelection);
 
-  const mCamera = new MainCamera(-30, playerShip);
   const updateManager = new UpdateManager(playerControls);
   updateManager.addMixers(playerShip.mixer);
 

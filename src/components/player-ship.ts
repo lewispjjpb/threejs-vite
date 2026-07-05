@@ -85,6 +85,7 @@ export class PlayerShip extends Object3D {
   }
 
   public setPlayerStartPostion() {
+    console.log('set player start position');
     this.gltf.scene.position.set(0, 4, 0);
   }
 }
