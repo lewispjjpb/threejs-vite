@@ -14,7 +14,7 @@ export default function App() {
           <sphereGeometry args={[1, 32, 32]} />
         </mesh>
       </Canvas>
-      <div className="ui-background" style={{ width: '150px' }}>
+      <div className="ui-background" style={{ width: '170px' }}>
         <div>Select terrain</div>
         <select
           id="point-cloud-select"
