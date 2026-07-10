@@ -99,7 +99,7 @@ export class World {
         this.playerShip?.setPlayerStartPostion();
       });
     }
-
+    window.addEventListener('resize', this.resizeRenderWindow);
     this.resizeRenderWindow();
 
     await this.addPointData();
