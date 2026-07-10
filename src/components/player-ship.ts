@@ -26,13 +26,13 @@ export class PlayerShip extends Object3D {
 
     const [colorTexture, emiText, roughnessTexture] = [
       textureLoader.load(
-        'src/models/player-ship/Intergalactic Spaceship_color_4.jpg'
+        '/threejs-vite/models/player-ship/Intergalactic Spaceship_color_4.jpg'
       ),
       textureLoader.load(
-        'src/models/player-ship/Intergalactic Spaceship_emi.jpg'
+        '/threejs-vite/models/player-ship/Intergalactic Spaceship_emi.jpg'
       ),
       textureLoader.load(
-        'src/models/player-ship/Intergalactic Spaceship_metalness-Intergalactic Spaceship_rough.jpg'
+        '/threejs-vite/models/player-ship/Intergalactic Spaceship_metalness-Intergalactic Spaceship_rough.jpg'
       ),
     ];
     colorTexture.flipY = false;
@@ -40,7 +40,7 @@ export class PlayerShip extends Object3D {
     roughnessTexture.flipY = false;
     try {
       const gltf = await loader.loadAsync(
-        '/src/models/player-ship/Baked_Animations_Intergalactic_Spaceships_Version_2.gltf'
+        '/threejs-vite/models/player-ship/Baked_Animations_Intergalactic_Spaceships_Version_2.gltf'
       );
       gltf.scene.traverse((child) => {
         if (child instanceof Mesh) {

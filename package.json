@@ -4,8 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
     "dev": "npx vite",
+    "preview": "vite preview --host",
     "format": "prettier --write ."
   },
   "prettier": {

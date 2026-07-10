@@ -25,7 +25,7 @@ export class PlayerControls {
 
   public moveMesh() {
     this.playerMesh.translateOnAxis(this.forwardVector, this.speed);
-
+debugger
     /**
      * speed controls
      */
