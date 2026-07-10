@@ -10,7 +10,6 @@ import {
   PointCloudOptionKeys,
 } from './utils/app-constants';
 
-
 // const pDL = new PointDataLoader();
 
 export class World {
@@ -23,6 +22,8 @@ export class World {
   private mCamera: MainCamera | null = null;
   private playerShip: PlayerShip | null = null;
   private playerControls: PlayerControls | null = null;
+  private updateManager: UpdateManager | null = null;
+  public pointSelection: PointCloudOptionKeys = 'terrain1';
 
   constructor() {
     this.pDL = new PointDataLoader();
@@ -31,9 +32,7 @@ export class World {
     this.renderer = new WebGLRenderer();
   }
 
-  async setWorld(
-    scene: Scene,
-  ) {
+  async setWorld(scene: Scene) {
     const ambientLight = new AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
     const directionalLight = new DirectionalLightObject(
@@ -45,12 +44,9 @@ export class World {
     scene.add(directionalLight.dirLight.target);
   }
 
-  async addPointData(
-    // scene: Scene,
-    pointSelection: PointCloudOptionKeys = 'terrain1'
-  ) {
+  async addPointData() {
     this.pDL.removePointFromScene(this.scene);
-    await this.pDL.loadPointData(POINT_CLOUD_OPTIONS[pointSelection]);
+    await this.pDL.loadPointData(POINT_CLOUD_OPTIONS[this.pointSelection]);
     this.pDL.addPointToScene(this.scene);
   }
 
@@ -75,19 +71,18 @@ export class World {
   private animateWorld() {
     if (!this.mCamera) throw new Error('Camera not initialized');
     this.timer.update();
+    this.mCamera.updatePosition();
+    this.updateManager?.update(this.timer.getDelta());
     this.renderer.render(this.scene, this.mCamera.camera);
   }
 
   public async initWorld() {
-
     if (!this.renderer) throw new Error('Renderer not initialized');
     if (!this.scene) throw new Error('Scene not initialized');
 
     this.playerShip = await this.addObjects(this.scene);
 
-
     await this.setWorld(this.scene);
-    let pointSelection: PointCloudOptionKeys = 'terrain1';
     this.playerControls = new PlayerControls(this.playerShip.gltf.scene);
     this.mCamera = new MainCamera(-30, this.playerShip);
 
@@ -95,31 +90,23 @@ export class World {
       //TODO: refactor to allow for more than just the select element
       const target = e.target as HTMLSelectElement;
       if (target.id === 'point-cloud-select') {
-        pointSelection =
-          (target?.value as PointCloudOptionKeys) ?? pointSelection;
+        this.pointSelection =
+          (target?.value as PointCloudOptionKeys) ?? this.pointSelection;
         this.addPointData();
         this.playerShip?.setPlayerStartPostion();
       }
     });
 
-      this.resizeRenderWindow();
+    this.resizeRenderWindow();
     window.addEventListener('load', () => this.resizeRenderWindow());
 
     await this.addPointData();
 
-    const updateManager = new UpdateManager(this.playerControls);
-    updateManager.addMixers(this.playerShip.mixer);
+    this.updateManager = new UpdateManager(this.playerControls);
+    this.updateManager.addMixers(this.playerShip.mixer);
 
-    // function animate() {
-    //   timer.update();
-    //   updateManager.update(timer.getDelta());
-    //
-    //   mCamera.updatePosition();
-    //   this.renderer.render(this.scene, mCamera.camera);
-    // }
     this.renderer.setAnimationLoop(this.animateWorld.bind(this));
   }
-
 }
 
 // async function setWorld(
@@ -136,7 +123,6 @@ export class World {
 //   scene.add(directionalLight.dirLight);
 //   scene.add(directionalLight.dirLight.target);
 // }
-
 
 // async function addPointData(
 //   scene: Scene,
