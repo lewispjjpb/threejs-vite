@@ -35,6 +35,9 @@ export class PlayerControls {
     if (this.keysPressed['-']) {
       this.speed -= 0.05;
     }
+    if (this.keysPressed['0']) {
+      this.speed = 0;
+    }
 
     /**
      * strafe/translate

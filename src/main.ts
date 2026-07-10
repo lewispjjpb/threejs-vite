@@ -1,6 +1,9 @@
+import { WebGLRenderer, Scene } from 'three';
 import { World } from './vanilla-three';
+const renderer = new WebGLRenderer();
+const scene = new Scene();
 
-const world = new World();
+const world = new World(renderer, scene);
 
 world
   .initWorld()

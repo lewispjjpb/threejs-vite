@@ -23,13 +23,16 @@ export class World {
   private playerShip: PlayerShip | null = null;
   private playerControls: PlayerControls | null = null;
   private updateManager: UpdateManager | null = null;
-  public pointSelection: PointCloudOptionKeys = 'terrain1';
+  private domainParent: string = 'three-root';
+  private pointSelection: PointCloudOptionKeys = 'terrain1';
 
-  constructor() {
+  constructor(renderer: WebGLRenderer, scene: Scene, domainParent?: string) {
     this.pDL = new PointDataLoader();
     this.timer = new Timer();
-    this.scene = new Scene();
-    this.renderer = new WebGLRenderer();
+    this.scene = scene;
+    this.renderer = renderer;
+    this.domainParent = domainParent ?? this.domainParent;
+    this.resizeRenderWindow = this.resizeRenderWindow.bind(this);
   }
 
   async setWorld(scene: Scene) {
@@ -58,7 +61,7 @@ export class World {
 
   resizeRenderWindow() {
     if (!this.mCamera) throw new Error('Camera not initialized');
-    const parentElement = document.getElementById('three-root');
+    const parentElement = document.getElementById(this.domainParent);
     if (!parentElement) throw new Error('No parent element found');
     const width = parentElement.clientWidth;
     const height = parentElement.clientHeight;
@@ -86,19 +89,20 @@ export class World {
     this.playerControls = new PlayerControls(this.playerShip.gltf.scene);
     this.mCamera = new MainCamera(-30, this.playerShip);
 
-    document.body.addEventListener('click', (e) => {
-      //TODO: refactor to allow for more than just the select element
-      const target = e.target as HTMLSelectElement;
-      if (target.id === 'point-cloud-select') {
+    const selectEl = document.getElementById(
+      'point-cloud-select'
+    ) as HTMLSelectElement;
+    if (selectEl) {
+      selectEl.addEventListener('change', (e) => {
+        const target = e.target as HTMLSelectElement;
         this.pointSelection =
-          (target?.value as PointCloudOptionKeys) ?? this.pointSelection;
+          (target.value as PointCloudOptionKeys) ?? this.pointSelection;
         this.addPointData();
         this.playerShip?.setPlayerStartPostion();
-      }
-    });
+      });
+    }
 
     this.resizeRenderWindow();
-    window.addEventListener('load', () => this.resizeRenderWindow());
 
     await this.addPointData();
 
@@ -106,6 +110,12 @@ export class World {
     this.updateManager.addMixers(this.playerShip.mixer);
 
     this.renderer.setAnimationLoop(this.animateWorld.bind(this));
+  }
+
+  public destroy() {
+    this.renderer.setAnimationLoop(null);
+    this.renderer.dispose();
+    window.removeEventListener('resize', this.resizeRenderWindow);
   }
 }
 
