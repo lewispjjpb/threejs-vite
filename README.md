@@ -1,12 +1,12 @@
 ## Three js demo
 
-`in progress!`
+Available at the following URL `https://lewispjjpb.github.io/threejs-vite/`
 
 ## License
 
 MIT
 
-## To run
+## To run locally:
 
     - npm install
     - npm run dev
