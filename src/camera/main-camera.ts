@@ -1,6 +1,6 @@
 import { PerspectiveCamera, Vector3, MOUSE } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { PlayerShip } from '../components/player-ship';
+import { PlayerShip } from '../world-objects/player-ship';
 
 const fov = 75;
 const aspect = window.innerWidth / window.innerHeight;

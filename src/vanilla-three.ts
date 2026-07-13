@@ -1,6 +1,6 @@
 import { AmbientLight, Scene, WebGLRenderer, Timer, Mesh } from 'three';
 import { MainCamera } from './camera/main-camera';
-import { PlayerShip } from './components/player-ship';
+import { PlayerShip } from './world-objects/player-ship';
 import { DirectionalLightObject } from './lighting/directional-light';
 import { UpdateManager } from './services';
 import { PlayerControls } from './services';
@@ -114,7 +114,7 @@ export class World {
     this.renderer.setAnimationLoop(null);
     window.removeEventListener('resize', this.resizeRenderWindow);
 
-    // Clear GPU memory
+    // Clear GPU memory, meshes and materials
     this.scene.traverse((object) => {
       if (!(object instanceof Mesh)) return;
       object.geometry.dispose();
